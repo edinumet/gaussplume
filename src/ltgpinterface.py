@@ -33,26 +33,30 @@ class ltgpinterface():
                          "height": 10,
                          "strength": 15,
                          "heat": 10,
-                         "nstack": 1,
-                         "view": "plan"
+                         "nstack": 2,
+                         "view": "plan",
+                         "wvari": "constant"
                     }
         self.stabls = ["A","B","C","D","E","F","G"]
         self.outp=['plan','time_series','height_slice']
-        self.bit_nstacks = widgets.BoundedIntText(value = 1, min=1,  max=10, step=1, 
+        self.wvar=["constant","prevailing","fluctuating"]
+        self.bit_nstacks = widgets.BoundedIntText(value = self.stack["nstack"], min=1,  max=10, step=1, 
                                      description="N Stacks", width=50)
-        self.bit_wind = widgets.BoundedIntText(value = 2, min=1,  max=10, step=1, 
+        self.bit_wind = widgets.BoundedIntText(value = self.stack["wind"], min=1,  max=10, step=1, 
                                      description="wind speed $m \ s^{-1}$", width=50)
-        self.bit_height = widgets.BoundedIntText(value = 10, min=1, max=75, step=1, 
+        self.bit_height = widgets.BoundedIntText(value = self.stack["height"], min=1, max=75, step=1, 
                                         description="Height (m)", width=50)
-        self.bit_strength = widgets.BoundedIntText(value =100,  min=15, max=400, step=10, 
+        self.bit_strength = widgets.BoundedIntText(value =self.stack["strength"], min=15, max=400, step=10, 
                                         description="source strength g s-1", width=50)
-        self.dd_stability = widgets.Dropdown(value ="A", options=self.stabls, 
+        self.dd_stability = widgets.Dropdown(value =self.stack["stab"], options=self.stabls, 
                                        description="stability", width=50)
-        self.dd_viewd = widgets.Dropdown(value ="plan", options=self.outp, 
+        self.dd_viewd = widgets.Dropdown(value =self.stack["view"], options=self.outp, 
                                        description="views", width=50)
-        self.bit_wdirn = widgets.BoundedIntText(value=225, min=1, max=359, step=5, 
+        self.dd_wvarib = widgets.Dropdown(value =self.stack["wvari"], options=self.wvar, 
+                                       description="wind variability", width=50)
+        self.bit_wdirn = widgets.BoundedIntText(value=self.stack["wdirn"], min=1, max=359, step=5, 
                                        description="wind direction", width=50)
-        self.bit_heat = widgets.BoundedIntText(value=5, min=1, max=100, step=5, 
+        self.bit_heat = widgets.BoundedIntText(value=self.stack["heat"], min=1, max=100, step=5, 
                                        description="heat output", width=50)
         
         #self.sumtotal = widgets.Text(value=self.sumtt,description="Total should be 100%", width=50, color='red')
@@ -63,6 +67,7 @@ class ltgpinterface():
         self.bit_strength.observe(self.bit_strength_eventhandler, names='value')
         self.dd_stability.observe(self.dd_stability_eventhandler, names='value')
         self.dd_viewd.observe(self.dd_viewd_eventhandler, names='value')
+        self.dd_wvarib.observe(self.dd_wvarib_eventhandler, names='value')
         self.bit_wdirn.observe(self.bit_wdirn_eventhandler, names='value')
         self.bit_heat.observe(self.bit_heat_eventhandler, names='value')
         
@@ -71,7 +76,7 @@ class ltgpinterface():
         #self.btn.on_click(self.btn_eventhandler)
         self.h1 = widgets.HBox(children=[self.bit_wind, self.bit_wdirn, self.dd_stability])
         self.h2 = widgets.HBox(children=[self.bit_height, self.bit_strength, self.bit_heat])
-        self.h3 = widgets.HBox(children=[self.dd_viewd, self.bit_nstacks])
+        self.h3 = widgets.HBox(children=[self.dd_viewd, self.dd_wvarib, self.bit_nstacks])
         
     def bit_nstacks_eventhandler(self,change):
         self.bit_nstacks.observe(self.bit_nstacks_eventhandler, names='value')
@@ -92,6 +97,10 @@ class ltgpinterface():
     def dd_viewd_eventhandler(self,change):
         self.dd_viewd.observe(self.dd_viewd_eventhandler, names='value')
         self.stack["view"]=self.dd_viewd.value
+        
+    def dd_wvarib_eventhandler(self,change):
+        self.dd_wvarib.observe(self.dd_wvarib_eventhandler, names='value')
+        self.stack["wvari"]=self.dd_wvarib.value
 
     def bit_height_eventhandler(self,change):
         self.bit_height.observe(self.bit_height_eventhandler, names='value')

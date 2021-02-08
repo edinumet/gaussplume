@@ -1,9 +1,10 @@
 """
 Class to produce a streetmap image
-# Get the Streetmap image for the background
-# Needs to be done ONCE at the start of the program
-# and put in memory, rather than be loaded from disk. 
-# https://bryanbrattlof.com/adding-openstreetmaps-to-matplotlib/
+Get the Streetmap image for the background
+Needs to be done ONCE at the start of the program
+and put in memory, rather than be loaded from disk.
+Almost ALL code in this Class comes from:
+https://bryanbrattlof.com/adding-openstreetmaps-to-matplotlib/
 
 """
 
