@@ -38,7 +38,7 @@ class ltgpinterface():
                          "wvari": "constant"
                     }
         self.stabls = ["A","B","C","D","E","F","G"]
-        self.outp=['plan','time_series','height_slice']
+        self.outp=['plan','time_series','height_slice','none']
         self.wvar=["constant","prevailing","fluctuating"]
         self.bit_nstacks = widgets.BoundedIntText(value = self.stack["nstack"], min=1,  max=10, step=1, 
                                      description="N Stacks", width=50)

@@ -13,9 +13,9 @@ Configures stacks in gaussian plume model
 
 import numpy as np
 import math
+import src.ltgpinterface as fd
 
-
-def cfg():
+def cfg(stack,stabls,wvar):
     # SECTION 1: Configuration
     # Variables can be changed by the user
 
@@ -30,15 +30,14 @@ def cfg():
     EPSG:2062
     UTM_zone = '30V'
 
-    stab1 = fd.stabls.index(fd.stack["stab"])  # set from 1-6
-    print(stab1)
+    stab1 = stabls.index(stack["stab"])  # set from 1-6
 
-    output = fd.stack["view"]
+    output = stack["view"]
     x_slice = 26  # position (1-50) to take the slice in the x-direction
     y_slice = 1  # position (1-50) to plot concentrations vs time
 
-    wind = fd.stack["wvari"]
-    stacks = fd.stack["nstack"]
+    wind = stack["wvari"]
+    stacks = stack["nstack"]
     stack_x = [0., -100., -1000., 300,  130, 330, -1000, -1500, -2000, 2000]
     stack_y = [0., 100., 500., 300, 250, 850, -1000, 1500, 2000, 2000]
 
@@ -53,7 +52,7 @@ def cfg():
 
     # Assume CONSTANT_STABILITY for now
     stability = stab1 * np.ones((days * 24, 1))
-    stability_str = cfg.stability_str[stab1 - 1]
+    #stability_str = cfg.stability_str[stab1 - 1]
 
     # decide what kind of run to do, plan view or y-z slice, or time series
     if output != "height_slice": #== cfg.PLAN_VIEW or output == cfg.SURFACE_TIME or output == cfg.NO_PLOT:
@@ -69,20 +68,23 @@ def cfg():
         sys.exit()
 
     # Set the wind based on input flags++++++++++++++++++++++++++++++++++++++++
-    wind_speed = fd.stack["wind"] * np.ones((days * 24, 1))  # m/s
+    wind_speed = stack["wind"] * np.ones((days * 24, 1))  # m/s
 
-    if wind == fd.wvar[0]:    #cfg.CONSTANT_WIND:
-        wind_dir = fd.stack["wdirn"] * np.ones((days * 24, 1))
+    if wind == wvar[0]:    #cfg.CONSTANT_WIND:
+        wind_dir = stack["wdirn"] * np.ones((days * 24, 1))
         wind_dir_str = 'Constant wind'
-    elif wind == fd.wvar[2]:   #cfg.FLUCTUATING_WIND:
+    elif wind == wvar[2]:   #cfg.FLUCTUATING_WIND:
         wind_dir = 360. * np.random.rand(days * 24, 1)
         wind_dir_str = 'Random wind'
-    elif wind == fd.wvar[1]:   #cfg.PREVAILING_WIND:
+    elif wind == wvar[1]:   #cfg.PREVAILING_WIND:
         wind_dir = -np.sqrt(2.) * erfcinv(2. * np.random.rand(24 * days, 1)) * 2.  #         norminv(rand(days.*24,1),0,40)
         # note at this point you can add on the prevailing wind direction, i.e.
-        wind_dir = wind_dir + fd.stack["wdirn"]
+        wind_dir = wind_dir + stack["wdirn"]
         wind_dir[np.where(wind_dir >= 360.)] = \
             np.mod(wind_dir[np.where(wind_dir >= 360)], 360)
         wind_dir_str = 'Prevailing wind'
     else:
         sys.exit()
+    
+    return(x,y,z,times,stacks,stack_x,stack_y,stability,Dy,Dz,UTM_easting,UTM_northing,
+              output,Q,H,wind_dir,wind_speed)

@@ -18,8 +18,9 @@ from scipy.interpolate import griddata
 # https://www.reddit.com/r/Python/comments/87lbao/matplotlib_griddata_deprecation_help/
 import matplotlib.gridspec as gridspec
 #'plan','time_series','height_slice','none'
+from pyproj import Proj, transform
 
-def gpdraw(output):   # output the plots
+def gpdraw(C1,img,output,easting,northing,x,y,st_str,wdir_str):   # output the plots
     if output == "plan":    #cfg.PLAN_VIEW:
     # Set the map limit around Mossmorran
         extent = [-3.3733, -3.244456, 56.060534, 56.132276]
@@ -27,8 +28,8 @@ def gpdraw(output):   # output the plots
 
         # x and y are curently in units of metres from the central point (0,0)
         # convert them to eastings and northings
-        xe = cfg.UTM_easting + x
-        yn = cfg.UTM_northing + y
+        xe = easting + x
+        yn = northing + y
         # now convert to lat-lon
         p2 = Proj("+proj=utm +zone=30V, +north +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
         xp, yp = p2(xe,yn,inverse=True)
@@ -45,8 +46,9 @@ def gpdraw(output):   # output the plots
         plt.contourf(xp, yp, data, alpha=0.5, cmap = 'jet', 
                  levels=[ 100, 250, 750, 1000, 2000, 3000, 4000, 5000, 6000,
                       7000, 8000, 9000, 10000, 11000, 12000, 13000])
-    
-        ax.imshow(mp.img, extent=(xmax, xmin, ymin, ymax)) 
+        stability_str = str(st_str)
+        wind_dir_str = str(wdir_str)
+        ax.imshow(img, extent=(xmax, xmin, ymin, ymax)) 
         #plt.rcParams['xtick.top'] = plt.rcParams['xtick.labeltop'] = False
         ax.set_xlabel('longitude')
         ax.set_ylabel('latitude')

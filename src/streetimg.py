@@ -81,4 +81,5 @@ class stmap():
             self.y1 - self.yc)) # bottom
 
         self.drawmp()
+        return self.img
     # end run    
