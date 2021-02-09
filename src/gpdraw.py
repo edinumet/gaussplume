@@ -20,11 +20,19 @@ import matplotlib.gridspec as gridspec
 #'plan','time_series','height_slice','none'
 from pyproj import Proj, transform
 
-def gpdraw(C1,img,output,easting,northing,x,y,st_str,wdir_str):   # output the plots
+def gpdraw(C1,img,dlist):   # output the plots
+    output = dlist[0]
+    easting = dlist[1]
+    northing = dlist[2]
+    x = dlist[3]
+    y = dlist[4]
+    stability_str = str(dlist[5])
+    wind_dir_str = str(dlist[6])
     if output == "plan":    #cfg.PLAN_VIEW:
     # Set the map limit around Mossmorran
+        
         extent = [-3.3733, -3.244456, 56.060534, 56.132276]
-        fig, ax = plt.subplots(figsize=(12,8))
+        fig, ax = plt.subplots(figsize=(8,8))
 
         # x and y are curently in units of metres from the central point (0,0)
         # convert them to eastings and northings
@@ -46,8 +54,7 @@ def gpdraw(C1,img,output,easting,northing,x,y,st_str,wdir_str):   # output the p
         plt.contourf(xp, yp, data, alpha=0.5, cmap = 'jet', 
                  levels=[ 100, 250, 750, 1000, 2000, 3000, 4000, 5000, 6000,
                       7000, 8000, 9000, 10000, 11000, 12000, 13000])
-        stability_str = str(st_str)
-        wind_dir_str = str(wdir_str)
+
         ax.imshow(img, extent=(xmax, xmin, ymin, ymax)) 
         #plt.rcParams['xtick.top'] = plt.rcParams['xtick.labeltop'] = False
         ax.set_xlabel('longitude')
