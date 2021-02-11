@@ -42,9 +42,11 @@ class cfg():
         self.stack_x = [0., -100., -1000., 300,  130, 330, -1000, -1500, -2000, 2000]
         self.stack_y = [0., 100., 500., 300, 250, 850, -1000, 1500, 2000, 2000]
 
-        self.Q = [600., 500., 600., 700, 1000, 20, 40, 50, 10, 10]  # mass emitted per unit time
-        self.H = [80., 65., 60., 50, 15, 10, 15, 35, 10, 10]  # stack height, m
-        self.days = 2  # run the model for n days - could be 365!
+        self.Q = [self.stack["strength"]]  #  assume just 1 stack for now 
+        #       [600., 500., 600., 700, 1000, 20, 40, 50, 10, 10]  # mass emitted per unit time
+        self.H = [self.stack["fheight"]]  # assume just 1 stack for now
+        #        [80., 65., 60., 50, 15, 10, 15, 35, 10, 10]  # stack height, m
+        self.days = 1  # run the model for n days - could be 365!
 
         self.times = np.mgrid[1:self.days * 24 + 1:1] / 24.
 
@@ -69,7 +71,7 @@ class cfg():
             sys.exit()
 
         # Set the wind based on input flags++++++++++++++++++++++++++++++++++++++++
-        self.wind_speed = self.stack["wind"] * np.ones((self.days * 24, 1))  # m/s
+        self.wind_speed = self.stack["fwind"] * np.ones((self.days * 24, 1))  # m/s
 
         if self.wind == self.wvar[0]:    #cfg.CONSTANT_WIND:
             self.wind_dir = self.stack["wdirn"] * np.ones((self.days * 24, 1))

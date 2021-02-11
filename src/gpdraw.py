@@ -28,6 +28,8 @@ def gpdraw(C1,img,dlist):   # output the plots
     y = dlist[4]
     stability_str = str(dlist[5])
     wind_dir_str = str(dlist[6])
+    fheight_str = str(int(dlist[7]))
+    
     if output == "plan":    #cfg.PLAN_VIEW:
     # Set the map limit around Mossmorran
         
@@ -60,14 +62,15 @@ def gpdraw(C1,img,dlist):   # output the plots
         ax.set_xlabel('longitude')
         ax.set_ylabel('latitude')
         ax.set_title('Mossmorran AQ Breaches, 2019' + '\n'
-             +'('+stability_str + ' - ' + wind_dir_str+')', pad=35)
+             +'(Stability = '+stability_str + ', Direction = ' + wind_dir_str+'$^o$'+ '\n'
+             + 'Effective Height  = '+ fheight_str +' m )', pad=35)
     
         cb1 = plt.colorbar()
         cb1.set_label('$\mu$ g m$^{-3}$')
         ax.set_ylim(ymin, ymax)
         ax.set_xlim(xmax, xmin)
-        plt.savefig("Mossmorran_Concentrations.png")
-        plt.show()
+        #plt.savefig("Mossmorran_Concentrations.png")
+        plt.show()        
 
     elif output == "height_slice":    #cfg.HEIGHT_SLICE:
         plt.figure()
