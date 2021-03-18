@@ -20,12 +20,12 @@ class cfg():
         self.stabls = stabls
         self.wvar = wvar
         
-        self.dxy = 100  # resolution of the model in both x and y directions
-        self.dz = 100
+        self.dxy = 50  # resolution of the model in both x and y directions
+        self.dz = 50
         self.x = np.mgrid[-4000:4000 + self.dxy:self.dxy]  # solve on a 4x4 km domain
         self.y = self.x  # x-grid is same as y-grid
 
-        # Location of central point as Easting/Northing
+        # Location of central point as UTM Easting/Northing
         self.UTM_easting = 480786
         self.UTM_northing = 6216800
         self.EPSG:2062
@@ -46,12 +46,12 @@ class cfg():
         #       [600., 500., 600., 700, 1000, 20, 40, 50, 10, 10]  # mass emitted per unit time
         self.H = [self.stack["fheight"]]  # assume just 1 stack for now
         #        [80., 65., 60., 50, 15, 10, 15, 35, 10, 10]  # stack height, m
-        self.days = 1  # run the model for n days - could be 365!
+        self.days = 5  # run the model for n days - could be 365!
 
         self.times = np.mgrid[1:self.days * 24 + 1:1] / 24.
 
-        self.Dy = 100.
-        self.Dz = 100.
+        self.Dy = 50.
+        self.Dz = 50.
 
         # Assume CONSTANT_STABILITY for now
         self.stability = self.stab1 * np.ones((self.days * 24, 1))

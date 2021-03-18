@@ -1,0 +1,41 @@
+NT 20429 91545 = Little Raith Farm
+
+NT 18624 92832 = Watters Crescent Lochgelly
+
+NT 17042 91267 = Watson Street Cowdenbeath
+
+NT 16739 88794 = Donibristle 
+
+
+
+
+
+
+NT 16514 91275, E 316514  N 691275 = Cowdenbeath Primary
+
+NT 15032 90094, E 315032  N 690094 = Hill of Beath Primary
+
+NT 15404 91953, E 315404  N 691953 = Beath High School
+
+NT 16119 92069, E 316119  N 692069 = Foulford Primary
+
+NT 16040 91721, E 316040  N 691721 = Medical Practice 
+
+NT 16447 91694, E 316447  N 691694 = Leisure Centre
+
+NT 16839 92544, E 316839 N 692544 = Lumphinnans Primary
+
+
+receptors = {
+        'Little Raith Farm':     {'easting': 20429, 'northing': 91545, 'original': 1},
+        'Watters Crescent Lochgelly': {'easting': 18624, 'northing': 92832, 'original': 1},
+        'Watson Street Cowdenbeath':   {'easting': 17042, 'northing': 91267, 'original': 1},
+        'Donibristle':  {'easting': 16739, 'northing': 88794, 'original': 1},
+        'Cowdenbeath Primary':    {'easting': 16514, 'northing': 91275, 'original': 0},
+        'Hill of Beath Primary':     {'easting': 15032, 'northing': 90094, 'original': 0},
+        'Beath High School': {'easting': 15404, 'northing': 91953, 'original': 0},
+        'Foulford Primary':   {'easting': 16119, 'northing': 92069, 'original': 0},
+        'Medical Practice':  {'easting': 16040, 'northing': 91721, 'original': 0},
+        'Leisure Centre':           {'easting': 16447, 'northing': 91694, 'original': 0}
+        'Lumphinnans Primary':           {'easting': 16839, 'northing': 92544, 'original': 0}
+        }
