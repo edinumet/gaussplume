@@ -41,6 +41,9 @@ class ltgpinterface():
             'Leisure Centre':     {'utm_e': 478537, 'utm_n': 6218450, 'original': 0},
             'Lumphinnans Primary': {'utm_e': 478917, 'utm_n': 6219305, 'original': 0}
             }
+        self.dates = ['fepwx_April_20_25_2019.csv',
+                      'fepwx_Aug_12_21_2019.csv',
+                      'fepwx_Jan_26_Feb_20_2020.csv']
         
         self.stack = {"wind": 5, 
                       "wdirn": 135, 
@@ -59,7 +62,8 @@ class ltgpinterface():
         self.outp=['plan','time_series','height_slice','none']
         self.wvar=["constant","prevailing","fluctuating"]
         self.recepstouse=['Little Raith Farm','Watters Crescent Lochgelly','Watson Street Cowdenbeath',
-                         'Donibristle']    # default                 
+                         'Donibristle']    # default 
+        self.datetouse = ['fepwx_Jan_26_Feb_20_2020.csv']                
         self.mls_recps = widgets.SelectMultiple(
                      options=['Little Raith Farm','Watters Crescent Lochgelly','Watson Street Cowdenbeath',
                          'Donibristle','Cowdenbeath Primary','Hill of Beath Primary','Beath High School',
@@ -74,6 +78,11 @@ class ltgpinterface():
                 options=['manual', 'timeseries'],
                 value='manual',
                 description='Run_Type:',
+                disabled=False)
+        self.mls_dates = widgets.SelectMultiple(
+                options = self.dates,
+                value = [self.dates[2]],
+                description='Dates',
                 disabled=False)
         self.bit_nstacks = widgets.BoundedIntText(value = self.stack["nstack"], min=1,  max=10, step=1, 
                                      description="N Stacks", width=50)
@@ -107,14 +116,14 @@ class ltgpinterface():
         self.bit_heat.observe(self.bit_heat_eventhandler, names='value')
         self.rb_tm.observe(self.rb_tm_eventhandler, names='value')
         self.mls_recps.observe(self.mls_recps_eventhandler, names='value')
-        
+        self.mls_dates.observe(self.mls_dates_eventhandler, names='value')
         #self.btn = widgets.Button(description='Run RLINE', width=100)
         #self.btn.style.button_color = 'tomato'
         #self.btn.on_click(self.btn_eventhandler)
         self.h1 = widgets.HBox(children=[self.bit_wind, self.dd_stability,self.bit_wdirn])
         self.h2 = widgets.HBox(children=[self.bit_height, self.bit_heat, self.bit_strength])
         self.h3 = widgets.HBox(children=[self.dd_viewd, self.dd_wvarib, self.bit_nstacks])
-        self.h4 = widgets.HBox(children=[self.mls_recps, self.rb_tm])
+        self.h4 = widgets.HBox(children=[self.mls_recps, self.rb_tm, self.mls_dates])
         
     def bit_nstacks_eventhandler(self,change):
         self.bit_nstacks.observe(self.bit_nstacks_eventhandler, names='value')
@@ -172,6 +181,11 @@ class ltgpinterface():
     def mls_recps_eventhandler(self,change):
         self.mls_recps.observe(self.mls_recps_eventhandler, names='value')
         self.recepstouse=self.mls_recps.value
+        #print(self.recepstouse)
+    
+    def mls_dates_eventhandler(self,change):
+        self.mls_dates.observe(self.mls_dates_eventhandler, names='value')
+        self.datetouse=self.mls_dates.value
         #print(self.recepstouse)
 
     def m_finalheight(self):
