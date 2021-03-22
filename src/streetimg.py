@@ -37,7 +37,7 @@ class stmap():
 
 
     def drawmp(self): # Lets just check we've brought in the correct map!
-            plt.figure(figsize=(4, 4))
+            plt.figure(figsize=(8,8))
             plt.axis('off')
             plt.imshow(self.img, aspect='auto')
             plt.show()

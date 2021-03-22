@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import griddata
 # https://www.reddit.com/r/Python/comments/87lbao/matplotlib_griddata_deprecation_help/
 import matplotlib.gridspec as gridspec
+from matplotlib.colors import LogNorm
 #'plan','time_series','height_slice','none'
 from pyproj import Proj, transform
 
@@ -29,12 +30,15 @@ def gpdraw(C1,img,dlist):   # output the plots
     stability_str = str(dlist[5])
     wind_dir_str = str(dlist[6])
     fheight_str = str(int(dlist[7]))
-    
+    rtoplot = dlist[9]
+    dtimestr = dlist[10]
+    bts = dlist[11]
+
     if output == "plan":    #cfg.PLAN_VIEW:
     # Set the map limit around Mossmorran
         
         extent = [-3.3733, -3.244456, 56.060534, 56.132276]
-        fig, ax = plt.subplots(figsize=(8,8))
+        fig, ax = plt.subplots(figsize=(10,12))
 
         # x and y are curently in units of metres from the central point (0,0)
         # convert them to eastings and northings
@@ -47,26 +51,43 @@ def gpdraw(C1,img,dlist):   # output the plots
         xmax = np.min(xp)
         ymax = np.max(yp)
         ymin = np.min(yp)
-
+        
+        # We should also plot the receptors to be used
+        rtplotll = []   # lat lon coordinates of receptors
+        for i in range(0,len(rtoplot)):
+            xer = easting + rtoplot[i][0]
+            ynr = northing + rtoplot[i][1]
+            xpr, ypr = p2(xer,ynr,inverse=True)
+            rtplotll.append((xpr,ypr))
+        
+        #print(rtplotll)
         data = np.mean(C1, axis=2)*1e6
         # Find max conc so we can set the levels for the contours
         maxc = np.max(data)
         minc = np.min(data)
         # Need a cleverer and automatic solution to get levels.
-        plt.contourf(xp, yp, data, alpha=0.5, cmap = 'jet', 
-                 levels=[ 100, 250, 750, 1000, 2000, 3000, 4000, 5000, 6000,
-                      7000, 8000, 9000, 10000, 11000, 12000, 13000])
-
+        plt.contourf(xp, yp, data, alpha=0.25,levels=[5e0, 1e1, 5e1, 1e2, 5e2,1e3,5e3,5e4],
+                cmap=plt.cm.jet,norm = LogNorm())
+                 #levels=[ 5, 10, 20, 30, 40, 50, 100, 250, 750, 1000, 2000, 3000, 4000, 5000])
+                #levels=[5e0, 5e1, 5e2,5e3,5e4],cmap=plt.cm.jet,norm = LogNorm()
         ax.imshow(img, extent=(xmax, xmin, ymin, ymax)) 
         #plt.rcParams['xtick.top'] = plt.rcParams['xtick.labeltop'] = False
         ax.set_xlabel('longitude')
         ax.set_ylabel('latitude')
-        ax.set_title('Mossmorran AQ Breaches, 2019' + '\n'
-             +'(Stability = '+stability_str + ', Direction = ' + wind_dir_str+'$^o$'+ '\n'
-             + 'Effective Height  = '+ fheight_str +' m )', pad=35)
-    
-        cb1 = plt.colorbar()
+        if bts:
+            ax.set_title('Fife Ethylene Plant - Contribution' + '\n'
+             + 'to pollution level in period: '+ dtimestr)
+        else:
+            ax.set_title('Fife Ethylene Plant - Hourly Contribution' + '\n'
+            +'(Stability = '+stability_str + ', Direction = ' + wind_dir_str+'$^o$'+ '\n'
+            + 'Effective Height  = '+ fheight_str +' m )', pad=35)
+        cb1 = plt.colorbar(shrink=0.35)
         cb1.set_label('$\mu$ g m$^{-3}$')
+        # plot the receptors
+        xs = [x[0] for x in rtplotll]
+        ys = [x[1] for x in rtplotll]
+        plt.scatter(xs, ys, c="r", alpha=0.7, marker='^',
+            label="receptor")
         ax.set_ylim(ymin, ymax)
         ax.set_xlim(xmax, xmin)
         #plt.savefig("Mossmorran_Concentrations.png")
