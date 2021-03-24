@@ -24,8 +24,8 @@ class ltgpinterface():
             'C':  {'u*': 0.5, 'H': 150, "L":-100 },
             'D':  {'u*': 0.5, 'H': 50, "L":0 },
             'E':  {'u*': 0.3, 'H': 25, "L":100 },
-            'F':  {'u*': 0.2, 'H': -5, "L":20 },
-            'G':  {'u*': 0.1, 'H': -25, "L":5 },
+            'F':  {'u*': 0.2, 'H': -5, "L":20 }
+            #'G':  {'u*': 0.1, 'H': -25, "L":5 },
             }
         # receptor location in UTM coordinates    
         self.receptors = {
@@ -58,7 +58,7 @@ class ltgpinterface():
                       "fwind": 5,
                       "ts"  : 0
                     }
-        self.stabls = ["A","B","C","D","E","F","G"]
+        self.stabls = ["A","B","C","D","E","F"]
         self.outp=['plan','time_series','height_slice','none']
         self.wvar=["constant","prevailing","fluctuating"]
         self.recepstouse=['Little Raith Farm','Watters Crescent Lochgelly','Watson Street Cowdenbeath',

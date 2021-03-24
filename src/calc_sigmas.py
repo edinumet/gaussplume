@@ -12,7 +12,7 @@ def calc_sigmas(CATEGORY, x1):
     c = np.zeros(np.shape(x))
     d = np.zeros(np.shape(x))
 
-    if CATEGORY == 1:  # very unstable
+    if CATEGORY == 0:  # very unstable
         # vertical
         ind = np.where((x<100.) & (x>0.))
         a[ind] = 122.800; b[ind] = 0.94470
@@ -44,7 +44,7 @@ def calc_sigmas(CATEGORY, x1):
         # cross wind
         c[:] = 24.1670
         d[:] = 2.5334
-    elif CATEGORY == 2: # moderately unstable
+    elif CATEGORY == 1: # moderately unstable
         # vertical
         ind = np.where((x<200.) & (x>0.))
         a[ind] = 90.673; b[ind] = 0.93198
@@ -59,14 +59,14 @@ def calc_sigmas(CATEGORY, x1):
         c[:] = 18.3330
         d[:] = 1.8096
     
-    elif CATEGORY == 3:  # slightly unstable
+    elif CATEGORY == 2:  # slightly unstable
         # vertical
         a[:] = 61.141
         b[:] = 0.91465
         # cross wind
         c[:] = 12.5
         d[:] = 1.0857
-    elif CATEGORY == 4: # neutral
+    elif CATEGORY == 3: # neutral
         # vertical
         ind = np.where((x<300.) &(x>0.))
         a[ind] = 34.459; b[ind] = 0.86974
@@ -89,7 +89,7 @@ def calc_sigmas(CATEGORY, x1):
         # cross wind
         c[:] = 8.3330
         d[:] = 0.72382
-    elif CATEGORY == 5:  # moderately stable
+    elif CATEGORY == 4:  # moderately stable
         # vertical
         ind = np.where((x<100.) & (x>0.))
         a[ind] = 24.26; b[ind] = 0.83660
@@ -121,7 +121,7 @@ def calc_sigmas(CATEGORY, x1):
         # cross wind
         c[:] = 6.25
         d[:] = 0.54287
-    elif CATEGORY == 6:  # very stable
+    elif CATEGORY == 5:  # very stable
         # vertical
         ind = np.where((x<200.) & (x>0.))
         a[ind] = 15.209; b[ind] = 0.81558
