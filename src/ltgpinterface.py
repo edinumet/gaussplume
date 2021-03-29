@@ -43,7 +43,10 @@ class ltgpinterface():
             }
         self.dates = ['April_20_25_2019',
                       'Aug_12_21_2019',
-                      'Jan_26_Feb_20_2020']
+                      'Jan_26_Feb_20_2020',
+                      'Mar_02_05_2020',
+                      'Aug_11_15_2020',
+                      'Oct_03_07_2020']
         
         self.stack = {"wind": 5, 
                       "wdirn": 135, 
