@@ -1,12 +1,12 @@
 """
 Created: Tuesday 1st December 2020
 @author: John Moncrieff (j.moncrieff@ed.ac.uk)
-Last Modified on 5 Feb 2021 16:30 
+Last Modified on 6 April 2021 17:04 
 
 DESCRIPTION
 ===========
 
-Plots RLINE output and weather data
+Plots Gaussian Plume output
 """
 
 
@@ -38,7 +38,7 @@ def gpdraw(C1,img,dlist):   # output the plots
     # Set the map limit around Mossmorran
         
         extent = [-3.3733, -3.244456, 56.060534, 56.132276]
-        fig, ax = plt.subplots(figsize=(10,12))
+        fig, ax = plt.subplots(figsize=(14,16))
 
         # x and y are curently in units of metres from the central point (0,0)
         # convert them to eastings and northings
@@ -76,7 +76,8 @@ def gpdraw(C1,img,dlist):   # output the plots
         ax.set_ylabel('latitude')
         if bts:
             ax.set_title('Fife Ethylene Plant - Contribution' + '\n'
-             + 'to pollution level in period: '+ dtimestr)
+             + 'to pollution level in period: '+ dtimestr + '\n'
+             + 'Effective Height  = '+ fheight_str +' m ', pad=15)
         else:
             ax.set_title('Fife Ethylene Plant - Hourly Contribution' + '\n'
             +'(Stability = '+stability_str + ', Direction = ' + wind_dir_str+'$^o$'+ '\n'
