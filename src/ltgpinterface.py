@@ -1,7 +1,7 @@
 """
 Created: Tuesday 1st December 2020
 @author: John Moncrieff (j.moncrieff@ed.ac.uk)
-Last Modified on 17 March 2021 15:28 
+Last Modified on 05 April 2021 22:18 
 
 DESCRIPTION
 ===========
@@ -51,16 +51,21 @@ class ltgpinterface():
         self.stack = {"wind": 5, 
                       "wdirn": 135, 
                       "stab":"D",
-                      "height": 30,
-                      "strength": 350,
+                      "height": 100,
+                      "tstrength": 350,      # Tall stack strength
+                      "sstrength": 110,      # Fugitive emission strength
                       "heat": 0,
-                      "nstack": 1,
+                      "nstack":1,
+                      "ntstack": 1,
+                      "nsstack": 3,
                       "view": "plan",
                       "wvari": "constant",
-                      "fheight": 30,
+                      "fheight": 100,
                       "fwind": 5,
-                      "ts"  : 0
+                      "ts"  : 'manual',
+                      "ftype": "tall stack"
                     }
+
         self.stabls = ["A","B","C","D","E","F"]
         self.outp=['plan','time_series','height_slice','none']
         self.wvar=["constant","prevailing","fluctuating"]
@@ -75,8 +80,13 @@ class ltgpinterface():
                          'Donibristle'],
                      #rows=10,
                      description='receptors',
-                     disabled=True
+                     disabled=False
                      )
+        self.rb_ftype = widgets.RadioButtons(
+                options=['tall stack', 'ground flaring'],
+                value='tall stack',
+                description='Flare_Type:',
+                disabled=False)
         self.rb_tm = widgets.RadioButtons(
                 options=['manual', 'timeseries'],
                 value='manual',
@@ -87,14 +97,23 @@ class ltgpinterface():
                 value = [self.dates[0]],
                 description='Dates',
                 disabled=True)
-        self.bit_nstacks = widgets.BoundedIntText(value = self.stack["nstack"], min=1,  max=10, step=1, 
-                                     description="N Stacks", width=50)
+        # How many tall stacks?
+        self.bit_ntstacks = widgets.BoundedIntText(value = self.stack["ntstack"], min=0,  max=1, step=1, 
+                                     description="N Tall Stacks", disabled=False,
+                                     width=50)
+        self.bit_nsstacks = widgets.BoundedIntText(value = self.stack["nsstack"], min=0,  max=3, step=1, 
+                                     description="N Short Stacks", disabled=True,
+                                     width=50)
         self.bit_wind = widgets.BoundedIntText(value = self.stack["wind"], min=1,  max=15, step=1, 
                                      description="u ($m \ s^{-1}$)", width=50)
-        self.bit_height = widgets.BoundedIntText(value = self.stack["height"], min=1, max=100, step=1, 
+        self.bit_height = widgets.BoundedIntText(value = self.stack["height"], min=1, max=150, step=1, 
                                         description="Height (m)", width=50)
-        self.bit_strength = widgets.BoundedIntText(value =self.stack["strength"], min=150, max=4000, step=10, 
-                                        description="source strength g s-1", width=50)
+        self.bit_tstrength = widgets.BoundedIntText(value =self.stack["tstrength"], min=5, max=4000, step=10, 
+                                        description="tall flare (g s-1)", disabled=False,
+                                        width=50)
+        self.bit_sstrength = widgets.BoundedIntText(value =self.stack["sstrength"], min=5, max=4000, step=10, 
+                                        description="ground flare (g s-1)", disabled=True,
+                                        width=50)
         self.dd_stability = widgets.Dropdown(value =self.stack["stab"], options=self.stabls, 
                                        description="stability", width=50)
         self.dd_viewd = widgets.Dropdown(value =self.stack["view"], options=self.outp, 
@@ -108,30 +127,42 @@ class ltgpinterface():
         
         #self.sumtotal = widgets.Text(value=self.sumtt,description="Total should be 100%", width=50, color='red')
         
-        self.bit_nstacks.observe(self.bit_nstacks_eventhandler, names='value')
+        self.bit_ntstacks.observe(self.bit_ntstacks_eventhandler, names='value')
+        self.bit_nsstacks.observe(self.bit_nsstacks_eventhandler, names='value')
         self.bit_wind.observe(self.bit_wind_eventhandler, names='value')
         self.bit_height.observe(self.bit_height_eventhandler, names='value')
-        self.bit_strength.observe(self.bit_strength_eventhandler, names='value')
+        self.bit_tstrength.observe(self.bit_tstrength_eventhandler, names='value')
+        self.bit_sstrength.observe(self.bit_sstrength_eventhandler, names='value')
         self.dd_stability.observe(self.dd_stability_eventhandler, names='value')
         self.dd_viewd.observe(self.dd_viewd_eventhandler, names='value')
         self.dd_wvarib.observe(self.dd_wvarib_eventhandler, names='value')
         self.bit_wdirn.observe(self.bit_wdirn_eventhandler, names='value')
         self.bit_heat.observe(self.bit_heat_eventhandler, names='value')
         self.rb_tm.observe(self.rb_tm_eventhandler, names='value')
+        self.rb_ftype.observe(self.rb_ftype_eventhandler, names='value')
         self.mls_recps.observe(self.mls_recps_eventhandler, names='value')
         self.mls_dates.observe(self.mls_dates_eventhandler, names='value')
         #self.btn = widgets.Button(description='Run RLINE', width=100)
         #self.btn.style.button_color = 'tomato'
         #self.btn.on_click(self.btn_eventhandler)
-        self.h1 = widgets.HBox(children=[self.bit_wind, self.dd_stability,self.bit_wdirn])
-        self.h2 = widgets.HBox(children=[self.bit_height, self.bit_heat, self.bit_strength])
-        self.h3 = widgets.HBox(children=[self.dd_viewd, self.dd_wvarib, self.bit_nstacks])
-        self.h4 = widgets.HBox(children=[self.mls_recps, self.rb_tm, self.mls_dates])
+        self.h0 = widgets.HBox(children=[self.rb_ftype])
+        self.h1 = widgets.HBox(children=[self.bit_ntstacks, self.bit_nsstacks])
+        self.h2 = widgets.HBox(children=[self.bit_tstrength, self.bit_sstrength])
+        self.h3 = widgets.HBox(children=[self.bit_height])
+        self.h4 = widgets.HBox(children=[self.bit_heat])
+        self.h5 = widgets.HBox(children=[self.bit_wind, self.dd_stability, self.bit_wdirn])
+        self.h6 = widgets.HBox(children=[self.dd_viewd, self.dd_wvarib])
+        self.h7 = widgets.HBox(children=[self.mls_recps, self.mls_dates])
+        self.h8 = widgets.HBox(children=[self.rb_tm])
         
-    def bit_nstacks_eventhandler(self,change):
-        self.bit_nstacks.observe(self.bit_nstacks_eventhandler, names='value')
-        self.stack["nstack"]=self.bit_nstacks.value
-           
+    def bit_ntstacks_eventhandler(self,change):
+        self.bit_ntstacks.observe(self.bit_ntstacks_eventhandler, names='value')
+        self.stack["ntstack"]=self.bit_ntstacks.value
+    
+    def bit_nsstacks_eventhandler(self,change):
+        self.bit_nsstacks.observe(self.bit_nsstacks_eventhandler, names='value')
+        self.stack["nsstack"]=self.bit_nsstacks.value
+    
     def bit_wind_eventhandler(self,change):
         self.bit_wind.observe(self.bit_wind_eventhandler, names='value')
         self.stack["wind"]=self.bit_wind.value
@@ -156,15 +187,22 @@ class ltgpinterface():
         self.bit_height.observe(self.bit_height_eventhandler, names='value')
         self.stack["height"]=self.bit_height.value
 
-    def bit_strength_eventhandler(self,change):
-        self.bit_strength.observe(self.bit_strength_eventhandler, names='value')
-        self.stack["strength"]=self.bit_strength.value
+    def bit_tstrength_eventhandler(self,change):
+        self.bit_tstrength.observe(self.bit_tstrength_eventhandler, names='value')
+        self.stack["tstrength"]=self.bit_tstrength.value
+        
+    def bit_sstrength_eventhandler(self,change):
+        self.bit_sstrength.observe(self.bit_sstrength_eventhandler, names='value')
+        self.stack["sstrength"]=self.bit_sstrength.value
 
     def bit_heat_eventhandler(self,change):
         self.bit_heat.observe(self.bit_heat_eventhandler, names='value')
         self.stack["heat"]=self.bit_heat.value
-        self.stack["fheight"] = self.m_finalheight()
-        self.stack["fwind"] = self.wind_profile()
+        if self.stack["ftype"] == 'tall stack':
+            self.stack["fheight"] = self.m_finalheight()
+            self.stack["fwind"] = self.wind_profile()
+        else:
+            self.stack["fheight"] = 5  # Assume near ground level source
     
     def rb_tm_eventhandler(self,change):
         self.rb_tm.observe(self.rb_tm_eventhandler, names='value')
@@ -181,8 +219,30 @@ class ltgpinterface():
             self.bit_wdirn.disabled=False
             self.dd_stability.disabled=False
             self.mls_dates.disabled=True
-            self.mls_recps.disabled=True
-    
+            self.mls_recps.disabled=False
+            
+    def rb_ftype_eventhandler(self,change):
+        self.rb_ftype.observe(self.rb_ftype_eventhandler, names='value')
+        self.stack["ftype"]=self.rb_ftype.value
+        if self.stack["ftype"] == 'tall stack':
+            self.bit_ntstacks.disabled=False
+            self.bit_nsstacks.disabled=True
+            self.bit_tstrength.disabled=False 
+            self.bit_sstrength.disabled=True
+            self.bit_height.disabled=False
+            self.bit_heat.disabled=False
+            self.stack["fheight"] = self.m_finalheight()
+            self.stack["nstack"]=self.bit_ntstacks.value
+        else:
+            self.bit_ntstacks.disabled=True
+            self.bit_nsstacks.disabled=False
+            self.bit_tstrength.disabled=True
+            self.bit_sstrength.disabled=False
+            self.bit_height.disabled=True
+            self.bit_heat.disabled=True
+            self.stack["fheight"] = 5
+            self.stack["nstack"]=self.bit_nsstacks.value
+
     def mls_recps_eventhandler(self,change):
         self.mls_recps.observe(self.mls_recps_eventhandler, names='value')
         self.recepstouse=self.mls_recps.value
