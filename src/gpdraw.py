@@ -93,6 +93,7 @@ def gpdraw(C1,img,dlist,outfile):   # output the plots
             label="receptor")
         ax.set_ylim(ymin, ymax)
         ax.set_xlim(xmax, xmin)
+        fig.tight_layout()
         path = './results'
         plt.savefig(os.path.join(path,outfile))
         plt.show()        
