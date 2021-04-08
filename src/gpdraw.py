@@ -20,8 +20,10 @@ import matplotlib.gridspec as gridspec
 from matplotlib.colors import LogNorm
 #'plan','time_series','height_slice','none'
 from pyproj import Proj, transform
+import os
+from datetime import datetime
 
-def gpdraw(C1,img,dlist):   # output the plots
+def gpdraw(C1,img,dlist,outfile):   # output the plots
     output = dlist[0]
     easting = dlist[1]
     northing = dlist[2]
@@ -91,7 +93,8 @@ def gpdraw(C1,img,dlist):   # output the plots
             label="receptor")
         ax.set_ylim(ymin, ymax)
         ax.set_xlim(xmax, xmin)
-        #plt.savefig("Mossmorran_Concentrations.png")
+        path = './results'
+        plt.savefig(os.path.join(path,outfile))
         plt.show()        
 
     elif output == "height_slice":    #cfg.HEIGHT_SLICE:

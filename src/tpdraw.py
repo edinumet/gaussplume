@@ -13,10 +13,11 @@ Plots time series and weather data
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+import os
 # from matplotlib.mlab import griddata # deprecated since 2018
 
 
-def tpdraw(c, df1, cols, fd):   # output the plots
+def tpdraw(c, df1, cols, fd, dt_string):   # output the plots
     fig, ax = plt.subplots(c,1, sharex=True, figsize=(10,25));
     fig.tight_layout(h_pad=4)
     fig.suptitle('Fife Ethylene Plant \n' + fd.datetouse[0], fontsize=14)
@@ -25,4 +26,6 @@ def tpdraw(c, df1, cols, fd):   # output the plots
     for i in range(0,len(cols)):
         df1.plot(x='time',y=cols[i], ax=ax[i])
         plt.xticks(rotation=45)
+    path = './results'
+    plt.savefig(os.path.join(path,'receps_'+dt_string))
     plt.show()    
