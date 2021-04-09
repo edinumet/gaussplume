@@ -24,17 +24,14 @@ def tpdraw(c, df1, cols, fd, dt_string):   # output the plots
     fig.tight_layout(h_pad=4)
     fig.suptitle('Fife Ethylene Plant \n'+'Modelled air pollution \n'+ fd.datetouse[0], fontsize=14)
     plt.subplots_adjust(top=0.95, bottom=0.1, left=0.1, right=0.95)
-    #plt.xticks(rotation=45)
-    # Define the date format
-    
-    #plt.gca().xaxis.set_major_formatter(date_format)
+
     colylabels = ['(m $ s^{-1}$)', 'degrees', '', 'concentration \n ($ \mu g m^{-3}$)',
                    'concentration \n ($ \mu g m^{-3}$)', 'concentration \n ($ \mu g m^{-3}$)',
                    'concentration \n ($ \mu g m^{-3}$)','concentration \n ($ \mu g m^{-3}$)',
                    'concentration \n ($ \mu g m^{-3}$)','concentration \n ($ \mu g m^{-3}$)',
                    'concentration \n ($ \mu g m^{-3}$)','concentration \n ($ \mu g m^{-3}$)',
-                   'concentration \n ($ \mu g m^{-3}$)']
-    pltcols = ['r','g', 'b', 'm', 'm', 'm','m','m','m','m','m','m','m']
+                   'concentration \n ($ \mu g m^{-3}$)','concentration \n ($ \mu g m^{-3}$)']
+    pltcols = ['r','g', 'b', 'm', 'm', 'm','m','m','m','m','m','m','m','m','m']
     for i in range(0,len(cols)):
         df1.plot(x='time',y=cols[i], ax=ax[i], color=pltcols[i])
         ax[i].set_ylabel(colylabels[i])
