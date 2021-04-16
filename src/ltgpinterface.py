@@ -33,6 +33,7 @@ class ltgpinterface():
             'Watters Crescent Lochgelly': {'utm_e': 480697, 'utm_n': 6219619, 'original': 1},
             'Watson Street Cowdenbeath':  {'utm_e': 479138, 'utm_n': 6218032, 'original': 1},
             'Donibristle':  {'utm_e': 478871, 'utm_n': 6215555, 'original': 1},
+            'Auchtertool': {'utm_e': 484380, 'utm_n': 6217748, 'original': 1},
             'Cowdenbeath Primary':   {'utm_e': 478610, 'utm_n': 6218032, 'original': 0},
             'Hill of Beath Primary': {'utm_e': 477146, 'utm_n': 6216830, 'original': 0},
             'Beath High School': {'utm_e': 477491, 'utm_n': 6218694, 'original': 0},
@@ -70,14 +71,14 @@ class ltgpinterface():
         self.outp=['plan','time_series','height_slice','none']
         self.wvar=["constant","prevailing","fluctuating"]
         self.recepstouse=['Little Raith Farm','Watters Crescent Lochgelly','Watson Street Cowdenbeath',
-                         'Donibristle']    # default 
+                         'Donibristle','Auchtertool']    # default 
         self.datetouse = ['April_20_25_2019']                
         self.mls_recps = widgets.SelectMultiple(
                      options=['Little Raith Farm','Watters Crescent Lochgelly','Watson Street Cowdenbeath',
-                         'Donibristle','Cowdenbeath Primary','Hill of Beath Primary','Beath High School',
+                         'Donibristle','Auchtertool','Cowdenbeath Primary','Hill of Beath Primary','Beath High School',
                          'Foulford Primary','Medical Practice','Leisure Centre','Lumphinnans Primary'],
                      value=['Little Raith Farm','Watters Crescent Lochgelly','Watson Street Cowdenbeath',
-                         'Donibristle'],
+                         'Donibristle', 'Auchtertool'],
                      #rows=10,
                      description='receptors',
                      disabled=False

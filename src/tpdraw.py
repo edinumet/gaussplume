@@ -30,8 +30,9 @@ def tpdraw(c, df1, cols, fd, dt_string):   # output the plots
                    'concentration \n ($ \mu g m^{-3}$)','concentration \n ($ \mu g m^{-3}$)',
                    'concentration \n ($ \mu g m^{-3}$)','concentration \n ($ \mu g m^{-3}$)',
                    'concentration \n ($ \mu g m^{-3}$)','concentration \n ($ \mu g m^{-3}$)',
-                   'concentration \n ($ \mu g m^{-3}$)','concentration \n ($ \mu g m^{-3}$)']
-    pltcols = ['r','g', 'b', 'm', 'm', 'm','m','m','m','m','m','m','m','m','m']
+                   'concentration \n ($ \mu g m^{-3}$)','concentration \n ($ \mu g m^{-3}$)',
+                   'concentration \n ($ \mu g m^{-3}$)']
+    pltcols = ['r','g', 'b', 'm', 'm', 'm','m','m','m','m','m','m','m','m','m','m']
     for i in range(0,len(cols)):
         df1.plot(x='time',y=cols[i], ax=ax[i], color=pltcols[i])
         ax[i].set_ylabel(colylabels[i])
